@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  admin:
+    image: phpmyadmin:latest
+    links:
+      - 'mysql:db'
+    depends_on:
+      - mysql
+    ports:
+      - '8085:80'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SQL_DB_PASSWORD}
+      UPLOAD_LIMIT: 64M
+    networks:
+      - tmsnetwork
+
+  mysql:
+    image: 'mysql/mysql-server:8.0'
+    volumes:
+      - tms:/var/lib/mysql
+    ports:
+      - '${SQL_DB_PORT}:${SQL_DB_PORT}'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SQL_DB_PASSWORD}
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: ${SQL_DB_DATABASE}
+      MYSQL_USER: '${SQL_DB_USERNAME}'
+      MYSQL_PASSWORD: '${SQL_DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    networks:
+      - tmsnetwork
+
+  redis:
+    image: 'redis:6'
+    ports:
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    networks:
+      - tmsnetwork
+
+volumes:
+  tms:
+
+networks:
+  tmsnetwork:
+    driver: bridge
