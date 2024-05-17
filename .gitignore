@@ -1,6 +1,5 @@
 /.env
 /.env.test
-/.vscode
 /dist
 /node_modules
 /storage

@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode",
+        "mohsen1.prettify-json",
+        "mhutchie.git-graph",
+        "streetsidesoftware.code-spell-checker",
+        "yoavbls.pretty-ts-errors",
+        "github.vscode-github-actions",
+    ]
+}
