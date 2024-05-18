@@ -8,10 +8,10 @@ import { ApiConfigService } from '../../src/configs/api-config/api-config.servic
 import { AuthService } from '../../src/domains/auth/auth.service';
 import type { User } from '../../src/domains/users/user.entity';
 import { UsersService } from '../../src/domains/users/users.service';
-import type { UserRoleType } from '../../src/types';
 import { authAsRandomUser, removeDb } from '../setup/db';
 import { closeInRedisConnection } from '../setup/redis-memory';
 import { setupApplication } from '../setup/app-setup';
+import { UserRoleType } from '../../src/types';
 
 interface IConfigType {
   testModule?: TestingModule;
@@ -59,7 +59,10 @@ describe('AuthController', () => {
             phone: '08041920209',
           })
           .expect(201)
-          .then((response) => {
+          .end((error, response) => {
+            if (error) {
+              return done(error, response.body);
+            }
             expect(response.body.data.email).toBe('john.lark@email.com');
             expect(response.body.data.phone).toBe('08041920209');
             expect(response.body.data.role).toBe('user');
@@ -103,10 +106,13 @@ describe('AuthController', () => {
         .set('Content-Type', 'application/json')
         .send({
           identifier: user.email,
-          password: defaultPassword,
+          password: `${defaultPassword}`,
         })
         .expect(200)
-        .then((response) => {
+        .end((error, response) => {
+          if (error) {
+            return done(error, response.body);
+          }
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(user.id);
           //First Login should be true
@@ -123,10 +129,13 @@ describe('AuthController', () => {
         .set('Accept', 'application/json')
         .send({
           identifier: user.phone,
-          password: defaultPassword,
+          password: `${defaultPassword}`,
         })
         .expect(200)
-        .then((response) => {
+        .end((error, response) => {
+          if (error) {
+            return done(error, response.body);
+          }
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(user.id);
           //First login should now be false
@@ -160,7 +169,11 @@ describe('AuthController', () => {
           password: 'NewPassword',
         })
         .expect(200)
-        .then((response) => {
+        .end((error, response) => {
+          if (error) {
+            console.log('error', error);
+            return done(error, response.body);
+          }
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(user.id);
 
@@ -203,10 +216,13 @@ describe('AuthController', () => {
         .set('Content-Type', 'application/json')
         .send({
           identifier: user.email,
-          password: defaultPassword,
+          password: `${defaultPassword}`,
         })
         .expect(200)
-        .then((response) => {
+        .end((error, response) => {
+          if (error) {
+            return done(error, response.body);
+          }
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(user.id);
 
@@ -237,7 +253,10 @@ describe('AuthController', () => {
         .set('Authorization', `Bearer ${jwt}`)
         .expect('Content-Type', /json/)
         .expect(200)
-        .then((response) => {
+        .end((error, response) => {
+          if (error) {
+            return done(error, response.body);
+          }
           expect(response.body.data.email).toBe(authUser.email);
           expect(response.body.data.phone).toBe(authUser.phone);
           expect(response.body.data.role).toBe(authUser.role);
@@ -267,7 +286,10 @@ describe('AuthController', () => {
         .post('/v1/auth/refresh')
         .set('Authorization', `Bearer ${jwt}`)
         .expect(200)
-        .then((response) => {
+        .end((error, response) => {
+          if (error) {
+            return done(error, response.body);
+          }
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(authUser.id);
           expect(response.body.data.isFirstLogin).toBe(false);

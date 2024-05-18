@@ -12,10 +12,10 @@ import { ApiConfigService } from './configs/api-config/api-config.service';
 import { ConfigsModule } from './configs/configs.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './domains/auth/auth.module';
-import { AuthenticatorModule } from './domains/authenticator/authenticator.module';
 import { UsersModule } from './domains/users/users.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { TaskSchedulerModule } from './task-scheduler/task-scheduler.module';
+import { TasksModule } from './domains/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -59,9 +59,9 @@ import { TaskSchedulerModule } from './task-scheduler/task-scheduler.module';
     ConfigsModule,
     UsersModule,
     DatabaseModule,
-    AuthenticatorModule,
     AuthModule,
     TaskSchedulerModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [

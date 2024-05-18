@@ -64,7 +64,9 @@ export class UsersService {
       ...createUserDto,
       role: userRole.User,
       token: randomStr,
-      password: createUserDto.password,
+      password:
+        createUserDto.password ??
+        this.configService.get<string>('TMS_DEFAULT_PASSWORD'),
     };
 
     const userCreate = this.userRepository.create(userObj);

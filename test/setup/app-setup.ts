@@ -26,7 +26,8 @@ export const setupApplication = async (
     config.testModule ||
     (await Test.createTestingModule({
       imports,
-    }).compile());
+    })
+    .compile());
 
   const app = module.createNestApplication();
 

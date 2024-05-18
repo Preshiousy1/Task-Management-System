@@ -51,9 +51,6 @@ export class UsersController {
     return { data: UserDto.collection(adminUsers) };
   }
 
-  /**
-   * @TODO create end 2 end test for this @Lata
-   */
   @UseGuards(AdminRoleGuard)
   @Get('users')
   @ApiBearerAuth()

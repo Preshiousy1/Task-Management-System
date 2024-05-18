@@ -19,6 +19,18 @@ Install Typescript & the NestJs CLI globally
 npm install -g typescript @nestjs/cli
 ```
 
+Install Node Modules
+
+```bash
+npm install
+```
+
+Run The build
+
+```bash
+npm run build
+```
+
 ### Setup environment variables
 
 We need to setup our environment variables to be able to make use of this application. A sample `.env.example` file has been provided. This can be found in the directory of the repository.
@@ -92,7 +104,19 @@ Database seeders are used to seed the database with test or default data. This h
 When setting up the server, you would need an admin account to access some features. An Admin & Application Seeder has been created. To seed the data, run the command:
 
 ```bash
-npm run build && npm run sql:seed:run-class --name=AdminSeeder
+npm run sql:seed:run-class --name=AdminSeeder
+```
+
+These are the admin details that will be created
+
+```bash
+  {
+    first_name: 'TaskManager',
+    last_name: 'Admin',
+    email: 'admin@tms.com',
+    role: 'admin',
+    password: '6*i5MYEZM0d8',
+  }
 ```
 
 ### App Versioning
