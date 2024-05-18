@@ -1,4 +1,5 @@
 import type { userRole } from './constants';
+import { taskStatus, taskTypes } from './constants/tasks';
 
 export type Constructor<T, Arguments extends unknown[] = undefined[]> = new (
   ...arguments_: Arguments
@@ -7,6 +8,8 @@ export type Constructor<T, Arguments extends unknown[] = undefined[]> = new (
 export type ObjectValues<T> = T[keyof T];
 
 export type UserRoleType = ObjectValues<typeof userRole>;
+export type TaskStatus = ObjectValues<typeof taskStatus>;
+export type TaskType = ObjectValues<typeof taskTypes>;
 
 export interface IPaginationOptions {
   page: number;

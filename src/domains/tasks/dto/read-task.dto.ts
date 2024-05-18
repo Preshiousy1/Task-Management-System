@@ -2,32 +2,16 @@ import { taskStatus, taskTypes } from '@/constants/tasks';
 import { TaskStatus, TaskType } from '@/types';
 import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsIn,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsIn, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class CreateTaskDto {
+export class ReadTaskDto {
   @ApiProperty({
     description: 'The title of the task',
     example: 'Contact 5 prospective customers',
   })
-  @IsNotEmpty()
-  @IsString()
-  title: string;
-
-  @ApiProperty({
-    description: 'The description of the task',
-    example:
-      'Pick the first 5 contacts on our contacts sheet and call them to confirm their interest in our product.',
-  })
   @IsOptional()
   @IsString()
-  description?: string;
+  title: string;
 
   @ApiProperty({
     description: 'The status of this task',
@@ -41,9 +25,9 @@ export class CreateTaskDto {
     description: 'The type of task it is',
     example: taskTypes.Sales,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsIn(Object.values(taskTypes))
-  type: TaskType;
+  type?: TaskType;
 
   @ApiProperty({
     description: 'The duration of the task in HOURS',
@@ -69,4 +53,12 @@ export class CreateTaskDto {
   @IsOptional()
   @IsUUID()
   owner_id?: string;
+
+  @ApiProperty({
+    description: 'The ID of the user responsible for this task',
+    example: faker.datatype.uuid(),
+  })
+  @IsOptional()
+  @IsUUID()
+  created_by?: string;
 }

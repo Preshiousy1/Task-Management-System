@@ -1,10 +1,11 @@
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
 
 import { BaseEntity } from '../../common/base-entity';
 import { userRole } from '../../constants';
 import { UseDto } from '../../decorators/use-dto.decorator';
 import { generateHash } from '../../utils/helpers/hash.helpers';
 import { UserDto } from './dto/user.dto';
+import { Task } from '../tasks/entities/task.entity';
 
 @Entity({ name: 'users' })
 @UseDto(UserDto)
@@ -32,6 +33,12 @@ export class User extends BaseEntity<UserDto> {
 
   @Column({ type: 'int', width: 11, nullable: true })
   last_login: number | null;
+
+  @OneToMany(() => Task, (createdTasks) => createdTasks.createdBy)
+  createdTasks?: Task[];
+
+  @OneToMany(() => Task, (ownedTasks) => ownedTasks.ownedBy)
+  tasks?: Task[];
 
   @BeforeInsert()
   public setPassword() {
