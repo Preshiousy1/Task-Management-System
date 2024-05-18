@@ -2,18 +2,35 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { BaseDto } from '../../../../common/dto/base.dto';
 import type { TaskLog } from '../entities/task-log.entity';
+import { faker } from '@faker-js/faker';
 
 export class TaskLogDto extends BaseDto {
-  @ApiProperty()
+  @ApiProperty({
+    description:
+      'The tag of the log specifies which task field change is being logged',
+    example: 'status',
+  })
   tag: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The value of the field being logged stores the new input',
+    example: 'in-progress',
+  })
   value: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description:
+      'This field is for storing extra info in a stringified json format',
+    example: JSON.stringify({
+      old_status: 'todo',
+    }),
+  })
   meta: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The ID of the task being logged',
+    example: faker.datatype.uuid(),
+  })
   task_id: string;
 
   constructor(taskLog: TaskLog) {

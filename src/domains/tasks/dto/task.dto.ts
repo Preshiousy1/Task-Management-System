@@ -6,6 +6,7 @@ import { TaskStatus, TaskType } from '@/types';
 import { User } from '@/domains/users/user.entity';
 import { taskStatus, taskTypes } from '@/constants/tasks';
 import { faker } from '@faker-js/faker';
+import { TaskLog } from '../task-logs/entities/task-log.entity';
 
 export class TaskDto extends BaseDto {
   @ApiProperty({
@@ -62,6 +63,7 @@ export class TaskDto extends BaseDto {
   ownedBy?: User;
   dependsOn?: Task;
   dependentTasks?: Task[];
+  task_logs?: TaskLog[];
 
   constructor(task: Task) {
     super(task);
@@ -93,6 +95,9 @@ export class TaskDto extends BaseDto {
     }
     if (task.dependentTasks) {
       this.dependentTasks = task.dependentTasks;
+    }
+    if (task.task_logs) {
+      this.task_logs = task.task_logs;
     }
   }
 

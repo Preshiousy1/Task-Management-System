@@ -4,28 +4,45 @@ import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 import { EntityExists } from '../../../../validators/mysql/entity-exists.validator';
 import { Task } from '../../entities/task.entity';
+import { faker } from '@faker-js/faker';
 
 export class CreateTaskLogDto {
+  @ApiProperty({
+    description:
+      'The tag of the log specifies which task field change is being logged',
+    example: 'status',
+  })
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   tag: string;
 
+  @ApiProperty({
+    description: 'The value of the field being logged stores the new input',
+    example: 'in-progress',
+  })
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   value: string;
 
+  @ApiProperty({
+    description:
+      'This field is for storing extra info in a stringified json format',
+    example: JSON.stringify({
+      old_status: 'todo',
+    }),
+  })
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   meta: string;
 
+  @ApiProperty({
+    description: 'The ID of the task being logged',
+    example: faker.datatype.uuid(),
+  })
   @IsUUID()
   @EntityExists([
     Task,
     (args: ValidationArguments) => ({ id: args.object[args.property] }),
   ])
-  @ApiProperty()
   task_id: string;
 }

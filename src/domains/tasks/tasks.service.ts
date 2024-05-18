@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -9,25 +10,40 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { FindOptionsWhere, Like, Repository } from 'typeorm';
 import { taskStatus } from '@/constants/tasks';
+import { TaskLogsService } from './task-logs/task-logs.service';
+import { CreateTaskLogDto } from './task-logs/dto/create-task-log.dto';
 
 @Injectable()
 export class TasksService {
   constructor(
     @InjectRepository(Task)
-    private taskRepo: Repository<Task>, // @Inject(ApiConfigService) // private configService: ApiConfigService,
+    private taskRepo: Repository<Task>,
+    @Inject(TaskLogsService)
+    private taskLogService: TaskLogsService,
   ) {}
-  create(createTaskDto: CreateTaskDto, created_by: string) {
+  async create(createTaskDto: CreateTaskDto, created_by: string) {
     // 'This action adds a new task'
+    const status = createTaskDto.status ?? taskStatus.Todo;
     const task = this.taskRepo.create({
       ...createTaskDto,
       description: createTaskDto.description ?? '',
-      status: createTaskDto.status ?? taskStatus.Todo,
+      status,
       duration: createTaskDto.duration ?? 0,
       created_by,
       owner_id: createTaskDto.owner_id ?? created_by,
     });
 
-    return this.taskRepo.save(task);
+    const createTask = await this.taskRepo.save(task);
+    if (createTask) {
+      await this.writeTaskLog(
+        task,
+        'created',
+        'task created',
+        JSON.stringify(createTask),
+      );
+    }
+
+    return createTask;
   }
 
   findAll() {
@@ -38,6 +54,7 @@ export class TasksService {
         ownedBy: true,
         dependsOn: true,
         dependentTasks: true,
+        task_logs: true,
       },
     });
   }
@@ -51,6 +68,7 @@ export class TasksService {
         ownedBy: true,
         dependsOn: true,
         dependentTasks: true,
+        task_logs: true,
       },
     });
 
@@ -72,6 +90,7 @@ export class TasksService {
         ownedBy: true,
         dependsOn: true,
         dependentTasks: true,
+        task_logs: true,
       },
     });
   }
@@ -93,7 +112,21 @@ export class TasksService {
       }
     }
 
-    return this.taskRepo.update(id, { ...updateTaskDto });
+    const update = await this.taskRepo.update(id, { ...updateTaskDto });
+
+    //log status changes
+    if (update.affected && update.affected > 0) {
+      if (status && task.status !== status) {
+        await this.writeTaskLog(
+          task,
+          'status',
+          status as string,
+          JSON.stringify({ old_status: task.status }),
+        );
+      }
+    }
+
+    return update;
   }
 
   async remove(id: string) {
@@ -105,6 +138,34 @@ export class TasksService {
       );
     }
 
-    return this.taskRepo.delete({ id });
+    const deleted = await this.taskRepo.delete({ id });
+
+    //log task deletion
+    if (deleted.affected) {
+      await this.writeTaskLog(
+        task,
+        'delete',
+        'task was deleted',
+        JSON.stringify(task),
+      );
+    }
+
+    return deleted;
+  }
+
+  private async writeTaskLog(
+    task: Pick<Task, 'id'>,
+    tag: string,
+    value: string,
+    meta = '{}',
+  ) {
+    const newTaskLogDto: CreateTaskLogDto = {
+      task_id: task.id,
+      meta,
+      tag,
+      value,
+    };
+
+    return this.taskLogService.create(newTaskLogDto);
   }
 }
