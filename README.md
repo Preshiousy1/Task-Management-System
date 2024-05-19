@@ -121,6 +121,32 @@ These are the admin details that will be created
 
 ### WebSockets
 
+WebSockets has been setup on the application, and to make it easy for us, a nest js command has been provided to help us get started:
+
+```bash
+nest generate gateway domains/websocket-gateway
+```
+
+Running this command will create a websocket gateway named `websocket-gateway.gateway.ts` along with its test file `websocket-gateway.gateway.spec.ts` in the `src/domains/websocket-gateway` directory, with it's contents looking like:
+
+```ts
+@WebSocketGateway({ cors: { origin: '*' } })
+export class WebSocketGatewayGateway {
+  @WebSocketServer() io: Server;
+
+  @SubscribeMessage('ping')
+  handleMessage(client: Socket, data: string): { event: string; data: string } {
+    return {
+      event: 'pong',
+      data,
+    };
+  }
+}
+```
+
+Once created, the websocket has to be registered for NestJs to discover and run it at the periods specified.
+The websocket has to be registered in `src/app.module.ts` as a provider, otherwise NestJs will not execute the websocket.
+
 The app implements websockets for these events:
 
 ```bash
