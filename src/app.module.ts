@@ -16,6 +16,7 @@ import { UsersModule } from './domains/users/users.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { TaskSchedulerModule } from './task-scheduler/task-scheduler.module';
 import { TasksModule } from './domains/tasks/tasks.module';
+import { DataStreamGateway } from './domains/data-stream/data-stream.gateway';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { TasksModule } from './domains/tasks/tasks.module';
       useClass: JwtAuthGuard,
     },
     AppService,
+    DataStreamGateway,
   ],
 })
 export class AppModule {}

@@ -46,8 +46,12 @@ export class ApiConfigService {
 
   get throttleConfig() {
     return {
-      ttl: this.getNumber('THROTTLE_TTL'),
-      limit: this.getNumber('THROTTLE_LIMIT'),
+      throttlers: [
+        {
+          ttl: this.getNumber('THROTTLE_TTL'),
+          limit: this.getNumber('THROTTLE_LIMIT'),
+        },
+      ],
     };
   }
 

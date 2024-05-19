@@ -113,8 +113,12 @@ describe('ApiConfigService', () => {
 
     it('should return the throttle config', () => {
       expect(service.throttleConfig).toMatchObject({
-        ttl: 60,
-        limit: 60,
+        throttlers: [
+          {
+            ttl: 60,
+            limit: 60,
+          },
+        ],
       });
     });
   });
