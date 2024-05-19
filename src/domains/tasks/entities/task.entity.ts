@@ -1,9 +1,11 @@
-import { UseDto } from '@/decorators/use-dto.decorator';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { TaskDto } from '../dto/task.dto';
-import { BaseEntity } from '../../../common/base-entity';
+
+import { UseDto } from '@/decorators/use-dto.decorator';
 import { User } from '@/domains/users/user.entity';
 import { TaskStatus, TaskType } from '@/types';
+
+import { BaseEntity } from '../../../common/base-entity';
+import { TaskDto } from '../dto/task.dto';
 import { TaskLog } from '../task-logs/entities/task-log.entity';
 
 @Entity({ name: 'tasks' })

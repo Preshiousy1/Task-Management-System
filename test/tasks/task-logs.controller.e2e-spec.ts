@@ -3,17 +3,16 @@
 import type { HttpServer, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 
-import { taskStatus } from '../../src/constants/tasks';
-import type { TaskLog } from '../../src/domains/tasks/task-logs/entities/task-log.entity';
-import { TasksService } from '../../src/domains/tasks/tasks.service';
+import { taskStatus, taskTypes } from '../../src/constants/tasks';
 import type { CreateTaskDto } from '../../src/domains/tasks/dto/create-task.dto';
 import type { Task } from '../../src/domains/tasks/entities/task.entity';
+import type { CreateTaskLogDto } from '../../src/domains/tasks/task-logs/dto/create-task-log.dto';
+import type { TaskLog } from '../../src/domains/tasks/task-logs/entities/task-log.entity';
+import { TaskLogsService } from '../../src/domains/tasks/task-logs/task-logs.service';
+import { TasksService } from '../../src/domains/tasks/tasks.service';
 import { setupApplication } from '../setup/app-setup';
 import { authAsRandomAdmin, authAsRandomUser, removeDb } from '../setup/db';
 import { closeInRedisConnection } from '../setup/redis-memory';
-import { taskTypes } from '../../src/constants/tasks';
-import { TaskLogsService } from '../../src/domains/tasks/task-logs/task-logs.service';
-import { CreateTaskLogDto } from '../../src/domains/tasks/task-logs/dto/create-task-log.dto';
 
 describe('TaskLogController (e2e)', () => {
   let app: INestApplication;
@@ -82,6 +81,7 @@ describe('TaskLogController (e2e)', () => {
           if (err) {
             return done(err);
           }
+
           expect(res.body.data).toHaveLength(2);
           done();
         });

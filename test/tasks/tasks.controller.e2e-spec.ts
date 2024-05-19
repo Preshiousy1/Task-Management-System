@@ -4,25 +4,24 @@ import { faker } from '@faker-js/faker';
 import {
   type HttpServer,
   type INestApplication,
-  NotFoundException,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import request from 'supertest';
 
+import { taskStatus, taskTypes } from '../../src/constants/tasks';
+import type { CreateTaskDto } from '../../src/domains/tasks/dto/create-task.dto';
+import type { Task } from '../../src/domains/tasks/entities/task.entity';
+import { TasksService } from '../../src/domains/tasks/tasks.service';
+import type { User } from '../../src/domains/users/user.entity';
 import { setupApplication } from '../setup/app-setup';
 import { authAsRandomAdmin, authAsRandomUser, removeDb } from '../setup/db';
 import { closeInRedisConnection } from '../setup/redis-memory';
-import { TasksService } from '../../src/domains/tasks/tasks.service';
-import { Task } from '../../src/domains/tasks/entities/task.entity';
-import { CreateTaskDto } from '../../src/domains/tasks/dto/create-task.dto';
-import { taskTypes, taskStatus } from '../../src/constants/tasks';
-import { User } from '../../src/domains/users/user.entity';
 
 describe('TasksController (E2E)', () => {
   let app: INestApplication;
   let server: HttpServer;
   let jwtAdmin: string;
-  let jwtUser: string;
   let adminUser: User;
   let user: User;
   let taskService: TasksService;
@@ -46,7 +45,6 @@ describe('TasksController (E2E)', () => {
     user = randomUser.user;
 
     jwtAdmin = admin.jwt;
-    jwtUser = randomUser.jwt;
 
     createTaskDto = {
       title: 'Family Living Task',
@@ -163,7 +161,7 @@ describe('TasksController (E2E)', () => {
         .send({ status: taskStatus.Done })
         .expect('Content-Type', /json/)
         .expect(400)
-        .then(async (res) => {
+        .then(async (_res) => {
           //then update its parent to done
           await taskService.update(task.id, { status: taskStatus.Done });
           done();

@@ -1,12 +1,13 @@
+import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { BaseDto } from '../../../common/dto/base.dto';
-import { Task } from '../entities/task.entity';
-import { TaskStatus, TaskType } from '@/types';
 import { taskStatus, taskTypes } from '@/constants/tasks';
-import { faker } from '@faker-js/faker';
-import { TaskLog } from '../task-logs/entities/task-log.entity';
-import { UserDto } from '@/domains/users/dto/user.dto';
+import type { UserDto } from '@/domains/users/dto/user.dto';
+import { TaskStatus, TaskType } from '@/types';
+
+import { BaseDto } from '../../../common/dto/base.dto';
+import type { Task } from '../entities/task.entity';
+import type { TaskLog } from '../task-logs/entities/task-log.entity';
 
 export class TaskDto extends BaseDto {
   @ApiProperty({
@@ -60,9 +61,13 @@ export class TaskDto extends BaseDto {
   created_by: string;
 
   createdBy?: UserDto;
+
   ownedBy?: UserDto;
+
   dependsOn?: Task;
+
   dependentTasks?: Task[];
+
   task_logs?: TaskLog[];
 
   constructor(task: Task) {
@@ -87,15 +92,19 @@ export class TaskDto extends BaseDto {
     if (task.ownedBy) {
       this.ownedBy = task.ownedBy.toDto();
     }
+
     if (task.createdBy) {
       this.createdBy = task.createdBy.toDto();
     }
+
     if (task.dependsOn) {
       this.dependsOn = task.dependsOn;
     }
+
     if (task.dependentTasks) {
       this.dependentTasks = task.dependentTasks;
     }
+
     if (task.task_logs) {
       this.task_logs = task.task_logs;
     }

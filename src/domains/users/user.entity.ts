@@ -4,8 +4,8 @@ import { BaseEntity } from '../../common/base-entity';
 import { userRole } from '../../constants';
 import { UseDto } from '../../decorators/use-dto.decorator';
 import { generateHash } from '../../utils/helpers/hash.helpers';
-import { UserDto } from './dto/user.dto';
 import { Task } from '../tasks/entities/task.entity';
+import { UserDto } from './dto/user.dto';
 
 @Entity({ name: 'users' })
 @UseDto(UserDto)

@@ -12,11 +12,11 @@ import { ApiConfigService } from './configs/api-config/api-config.service';
 import { ConfigsModule } from './configs/configs.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './domains/auth/auth.module';
+import { DataStreamGateway } from './domains/data-stream/data-stream.gateway';
+import { TasksModule } from './domains/tasks/tasks.module';
 import { UsersModule } from './domains/users/users.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { TaskSchedulerModule } from './task-scheduler/task-scheduler.module';
-import { TasksModule } from './domains/tasks/tasks.module';
-import { DataStreamGateway } from './domains/data-stream/data-stream.gateway';
 
 @Module({
   imports: [

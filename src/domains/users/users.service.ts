@@ -71,9 +71,7 @@ export class UsersService {
 
     const userCreate = this.userRepository.create(userObj);
 
-    const user = await this.userRepository.save(userCreate);
-
-    return user;
+    return this.userRepository.save(userCreate);
   }
 
   async createAdmin(createUserDto: CreateUserDto): Promise<User> {

@@ -1,7 +1,7 @@
 export const mockedTask = {
   id: '5a264616-da17-48bf-8b13-a4084de6c724',
-  created_at: 1716137642,
-  updated_at: 1716137642,
+  created_at: 1_716_137_642,
+  updated_at: 1_716_137_642,
   title: 'Call 5 Clients',
   description: '',
   status: 'todo',

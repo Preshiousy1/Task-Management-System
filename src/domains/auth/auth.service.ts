@@ -48,7 +48,6 @@ export class AuthService {
 
   async validateUser(
     userLoginDto: UserLoginDto,
-    ip: string,
   ): Promise<[AuthUser, TokenPayloadDto, boolean]> {
     const user = await this.usersService.findByIdentifier(
       userLoginDto.identifier,
@@ -100,9 +99,12 @@ export class AuthService {
     const defaultPassword = this.configService.get<string>(
       'TMS_DEFAULT_PASSWORD',
     );
-    const reset = await this.resetPassword({ user, password: defaultPassword });
+    const isReset = await this.resetPassword({
+      user,
+      password: defaultPassword,
+    });
 
-    if (reset) {
+    if (isReset) {
       return `Password successfully reset to: ${defaultPassword}`;
     }
 

@@ -1,10 +1,10 @@
+import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
 import type { ValidationArguments } from 'class-validator';
 import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 import { EntityExists } from '../../../../validators/mysql/entity-exists.validator';
 import { Task } from '../../entities/task.entity';
-import { faker } from '@faker-js/faker';
 
 export class CreateTaskLogDto {
   @ApiProperty({

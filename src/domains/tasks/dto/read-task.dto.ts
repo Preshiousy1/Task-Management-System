@@ -1,8 +1,9 @@
-import { taskStatus, taskTypes } from '@/constants/tasks';
-import { TaskStatus, TaskType } from '@/types';
 import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+
+import { taskStatus, taskTypes } from '@/constants/tasks';
+import { TaskStatus, TaskType } from '@/types';
 
 export class ReadTaskDto {
   @ApiProperty({

@@ -3,9 +3,9 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AdminRoleGuard } from '@/guards/admin.guard';
 
-import { TaskLogsService } from './task-logs.service';
-import { TaskLogDto } from './dto/task-log-dto';
 import { QueryTaskLogDto } from './dto/query-task-log.dto';
+import { TaskLogDto } from './dto/task-log-dto';
+import { TaskLogsService } from './task-logs.service';
 
 @ApiTags('Task')
 @ApiBearerAuth()

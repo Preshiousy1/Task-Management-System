@@ -1,14 +1,19 @@
+import type { INestApplication, Provider } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { DataStreamGateway } from './data-stream.gateway';
-import { INestApplication } from '@nestjs/common';
-import { Socket, io } from 'socket.io-client';
-import { mockedTask } from '../../utils/mocks/entities/task.mock';
-import { Task } from '../tasks/entities/task.entity';
+import type { Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-async function createNestApp(...gateways: any): Promise<INestApplication> {
+import { mockedTask } from '../../utils/mocks/entities/task.mock';
+import type { Task } from '../tasks/entities/task.entity';
+import { DataStreamGateway } from './data-stream.gateway';
+
+async function createNestApp(
+  ...gateways: unknown[]
+): Promise<INestApplication> {
   const testingModule = await Test.createTestingModule({
-    providers: gateways,
+    providers: gateways as Provider[],
   }).compile();
+
   return testingModule.createNestApplication();
 }
 
@@ -42,7 +47,7 @@ describe('DataStreamGateway', () => {
     //Create a new task
     task = mockedTask as Task;
 
-    app.listen(3030);
+    void app.listen(3030);
   });
 
   afterAll(async () => {

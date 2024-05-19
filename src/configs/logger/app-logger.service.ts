@@ -30,7 +30,7 @@ export class AppLoggerService extends ConsoleLogger {
 
   async error(message: string, stack?: string, ...optionalParams: string[]) {
     try {
-      const log = await this.create({
+      await this.create({
         env: this.env,
         context: this.context,
         level: 'error',

@@ -19,7 +19,6 @@ import {
 } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomBytes } from 'crypto';
-import { RealIP } from 'nestjs-real-ip';
 import { Repository } from 'typeorm';
 
 import { AdminRoleGuard } from '@/guards/admin.guard';
@@ -34,8 +33,8 @@ import { AuthService } from './auth.service';
 import { AuthUser } from './dto/auth-user.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
-import { UserLoginDto } from './dto/user-login.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { UserLoginDto } from './dto/user-login.dto';
 @ApiTags('Authentication')
 @Controller({
   version: '1',
@@ -110,10 +109,9 @@ export class AuthController {
   @ApiUnprocessableEntityResponse({
     description: 'Invalid input data from user',
   })
-  async login(@Body() userLoginDto: UserLoginDto, @RealIP() ip: string) {
+  async login(@Body() userLoginDto: UserLoginDto) {
     const [user, token, isFirstLogin] = await this.authService.validateUser(
       userLoginDto,
-      ip,
     );
 
     return { data: LoginResponseDto.create(user, token, isFirstLogin) };
@@ -131,6 +129,7 @@ export class AuthController {
   })
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
     const message = await this.authService.forgotPassword(forgotPasswordDto);
+
     return { message };
   }
 
@@ -145,11 +144,12 @@ export class AuthController {
   })
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     const user = authUser();
-    const status = await this.authService.resetPassword({
+    const isReset = await this.authService.resetPassword({
       user,
       password: resetPasswordDto.password,
     });
-    if (status) {
+
+    if (isReset) {
       return { message: 'Password reset successfully' };
     }
   }

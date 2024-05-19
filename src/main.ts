@@ -2,7 +2,7 @@ import {
   HttpStatus,
   UnprocessableEntityException,
   ValidationPipe,
-  VersioningType
+  VersioningType,
 } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
@@ -49,9 +49,7 @@ async function bootstrap() {
     new QueryFailedFilter(reflector),
   );
 
-  app.useGlobalInterceptors(
-    new AuthUserInterceptor(),
-  );
+  app.useGlobalInterceptors(new AuthUserInterceptor());
 
   const configService = app.select(ConfigsModule).get(ApiConfigService);
 

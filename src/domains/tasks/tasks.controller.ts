@@ -1,21 +1,23 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Query,
+  Get,
   NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
-import { TasksService } from './tasks.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { TaskDto } from './dto/task.dto';
-import { ReadTaskDto } from './dto/read-task.dto';
+
 import { authUser } from '@/utils/helpers/auth.helpers';
+
+import { CreateTaskDto } from './dto/create-task.dto';
+import { ReadTaskDto } from './dto/read-task.dto';
+import { TaskDto } from './dto/task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
+import { TasksService } from './tasks.service';
 
 @ApiTags('Tasks')
 @Controller({
@@ -28,6 +30,7 @@ export class TasksController {
   @Post()
   async create(@Body() createTaskDto: CreateTaskDto) {
     const creator = authUser();
+
     return {
       data: await this.tasksService.create(createTaskDto, creator.id),
     };

@@ -14,7 +14,6 @@ export abstract class BaseProcessor {
 
   @OnQueueFailed()
   async onQueueFailed(job: Job, error: Error) {
-
     await this.logger.error(error.message, error.stack);
   }
 

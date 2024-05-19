@@ -4,14 +4,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Task } from './entities/task.entity';
-import { FindOptionsWhere, Like, Repository } from 'typeorm';
+import type { FindOptionsWhere } from 'typeorm';
+import { Like, Repository } from 'typeorm';
+
 import { taskStatus } from '@/constants/tasks';
+
+import type { CreateTaskDto } from './dto/create-task.dto';
+import type { UpdateTaskDto } from './dto/update-task.dto';
+import { Task } from './entities/task.entity';
+import type { CreateTaskLogDto } from './task-logs/dto/create-task-log.dto';
 import { TaskLogsService } from './task-logs/task-logs.service';
-import { CreateTaskLogDto } from './task-logs/dto/create-task-log.dto';
 
 @Injectable()
 export class TasksService {
@@ -21,6 +24,7 @@ export class TasksService {
     @Inject(TaskLogsService)
     private taskLogService: TaskLogsService,
   ) {}
+
   async create(createTaskDto: CreateTaskDto, created_by: string) {
     // 'This action adds a new task'
     const status = createTaskDto.status ?? taskStatus.Todo;
@@ -34,6 +38,8 @@ export class TasksService {
     });
 
     const createTask = await this.taskRepo.save(task);
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (createTask) {
       await this.writeTaskLog(
         task,
@@ -42,6 +48,7 @@ export class TasksService {
         JSON.stringify(createTask),
       );
     }
+
     return createTask;
   }
 
@@ -82,6 +89,7 @@ export class TasksService {
     if (where.title) {
       where.title = Like(`%${where.title}%`);
     }
+
     return this.taskRepo.find({
       where,
       relations: {
@@ -104,6 +112,7 @@ export class TasksService {
       const dependsOn = await this.findOne(
         dependent_task_id ?? task.dependent_task_id!,
       );
+
       if (status === taskStatus.Done && dependsOn.status !== taskStatus.Done) {
         throw new BadRequestException(
           `You can not move this task to 'done' until its dependent task has been moved to 'done'.`,
@@ -114,15 +123,18 @@ export class TasksService {
     const update = await this.taskRepo.update(id, { ...updateTaskDto });
 
     //log status changes
-    if (update.affected && update.affected > 0) {
-      if (status && task.status !== status) {
-        await this.writeTaskLog(
-          task,
-          'status',
-          status as string,
-          JSON.stringify({ old_status: task.status }),
-        );
-      }
+    if (
+      update.affected &&
+      update.affected > 0 &&
+      status &&
+      task.status !== status
+    ) {
+      await this.writeTaskLog(
+        task,
+        'status',
+        status as string,
+        JSON.stringify({ old_status: task.status }),
+      );
     }
 
     return update;
@@ -131,6 +143,7 @@ export class TasksService {
   async remove(id: string) {
     // `This action removes a #${id} task`
     const task = await this.findOne(id);
+
     if (task.dependentTasks && task.dependentTasks.length > 0) {
       throw new BadRequestException(
         `You can not delete this task because other tasks depend on it.`,

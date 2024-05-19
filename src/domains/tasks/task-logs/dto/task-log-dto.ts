@@ -1,8 +1,8 @@
+import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { BaseDto } from '../../../../common/dto/base.dto';
 import type { TaskLog } from '../entities/task-log.entity';
-import { faker } from '@faker-js/faker';
 
 export class TaskLogDto extends BaseDto {
   @ApiProperty({

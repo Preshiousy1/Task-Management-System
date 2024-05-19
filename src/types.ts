@@ -1,5 +1,5 @@
 import type { userRole } from './constants';
-import { taskStatus, taskTypes } from './constants/tasks';
+import type { taskStatus, taskTypes } from './constants/tasks';
 
 export type Constructor<T, Arguments extends unknown[] = undefined[]> = new (
   ...arguments_: Arguments

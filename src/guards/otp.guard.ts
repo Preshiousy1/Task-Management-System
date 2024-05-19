@@ -3,16 +3,10 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class OtpGuard implements CanActivate {
-  constructor() {}
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    if (!user) {
-      return false;
-    }
-
-    return true;
+    return Boolean(user);
   }
 }

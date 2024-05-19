@@ -14,7 +14,7 @@ describe('AppController', () => {
     }).compile();
   });
 
-  describe('getHello', () => {
+  describe('get hello', () => {
     it('should return "Task Management System!"', () => {
       const appController = app.get(AppController);
       expect(appController.getHello()).toBe('Task Management System!');

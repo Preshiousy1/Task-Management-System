@@ -1,21 +1,16 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import type { INestApplication } from '@nestjs/common';
-import type { TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 
 import { ApiConfigService } from '../../src/configs/api-config/api-config.service';
 import { AuthService } from '../../src/domains/auth/auth.service';
 import type { User } from '../../src/domains/users/user.entity';
 import { UsersService } from '../../src/domains/users/users.service';
+import type { UserRoleType } from '../../src/types';
+import { setupApplication } from '../setup/app-setup';
 import { authAsRandomUser, removeDb } from '../setup/db';
 import { closeInRedisConnection } from '../setup/redis-memory';
-import { setupApplication } from '../setup/app-setup';
-import { UserRoleType } from '../../src/types';
-
-interface IConfigType {
-  testModule?: TestingModule;
-}
 
 describe('AuthController', () => {
   let app: INestApplication;
@@ -63,6 +58,7 @@ describe('AuthController', () => {
             if (error) {
               return done(error, response.body);
             }
+
             expect(response.body.data.email).toBe('john.lark@email.com');
             expect(response.body.data.phone).toBe('08041920209');
             expect(response.body.data.role).toBe('user');
@@ -113,6 +109,7 @@ describe('AuthController', () => {
           if (error) {
             return done(error, response.body);
           }
+
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(user.id);
           //First Login should be true
@@ -136,6 +133,7 @@ describe('AuthController', () => {
           if (error) {
             return done(error, response.body);
           }
+
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(user.id);
           //First login should now be false
@@ -171,9 +169,9 @@ describe('AuthController', () => {
         .expect(200)
         .end((error, response) => {
           if (error) {
-            console.log('error', error);
             return done(error, response.body);
           }
+
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(user.id);
 
@@ -223,6 +221,7 @@ describe('AuthController', () => {
           if (error) {
             return done(error, response.body);
           }
+
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(user.id);
 
@@ -257,6 +256,7 @@ describe('AuthController', () => {
           if (error) {
             return done(error, response.body);
           }
+
           expect(response.body.data.email).toBe(authUser.email);
           expect(response.body.data.phone).toBe(authUser.phone);
           expect(response.body.data.role).toBe(authUser.role);
@@ -290,6 +290,7 @@ describe('AuthController', () => {
           if (error) {
             return done(error, response.body);
           }
+
           expect(response.body.data.token.accessToken).toBeDefined();
           expect(response.body.data.user.id).toBe(authUser.id);
           expect(response.body.data.isFirstLogin).toBe(false);

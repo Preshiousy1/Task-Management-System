@@ -47,6 +47,7 @@ module.exports = {
     'unicorn/prefer-module': 'off',
     'unicorn/prefer-node-protocol': 'off',
     'unicorn/new-for-builtins': 'off',
+    'unicorn/expiring-todo-comments': 'off',
     'sonarjs/no-duplicate-string': 'off',
     'import/no-unresolved': ['error', { ignore: ['^@hrdrone/*'] }],
     'prettier/prettier': [
