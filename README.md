@@ -119,6 +119,30 @@ These are the admin details that will be created
   }
 ```
 
+### WebSockets
+
+The app implements websockets for these events:
+
+```bash
+  'task-created'
+  'task-updated'
+```
+
+The `socket.io-client` is utilized and receives two parameters, the `event` and the `payload`. This is what the socket call would look like:
+
+```bash
+  ioClient.emit('task-created', task);
+```
+
+Where `task` is an object of type Entity `Task`. Such a call would return the event and payload back in this format:
+
+```bash
+  {
+    event: 'task-created',
+    data: task
+  }
+```
+
 ### App Versioning
 
 App versioning has been enabled, and the current routes are v1 routes. e.g. `localhost:3000/v1/tasks`
